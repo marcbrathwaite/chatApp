@@ -1,0 +1,22 @@
+{
+  "name": "chatApp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev:server": "nodemon --exec \"node src/server.js\" --ignore build/ --ignore public/",
+    "dev:client": "npm run start --prefix src/ui",
+    "dev": "npm-run-all --parallel dev:server dev:client"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^2.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.3"
+  }
+}
