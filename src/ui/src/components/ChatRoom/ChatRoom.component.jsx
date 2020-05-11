@@ -8,10 +8,7 @@ import JoinChatRoomModal from './JoinChatRoomModal/JoinChatRoomModal.component'
 import SideBar from './SideBar/SideBar.component'
 import Messages from './Messages/Messages.component'
 
-// utils
-// import autoscroll from '../../utils/autoscoll'
-
-const ENDPOINT = 'http://127.0.0.1:4000'
+const ENDPOINT = process.env.NODE_ENV === 'development' ? 'http://127.0.0.1:4000' : '/'
 
 Modal.setAppElement('#root')
 

@@ -7,7 +7,8 @@
     "start": "node src/server.js",
     "dev:server": "nodemon --exec \"node src/server.js\" --ignore build/ --ignore public/",
     "dev:client": "npm run start --prefix src/ui",
-    "dev": "npm-run-all --parallel dev:server dev:client"
+    "dev": "npm-run-all --parallel dev:server dev:client",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix src/ui && npm run build --prefix src/ui"
   },
   "keywords": [],
   "author": "",
