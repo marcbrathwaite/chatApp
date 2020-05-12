@@ -6,6 +6,18 @@ const UserManager = require('../managers/UserManager')
 // utils
 const generateMessage = require('../utils/generateMessage')
 
+// Constants
+const { EVENTS } = require('../../ui/src/constants')
+
+const {
+  CONNECTION,
+  JOIN,
+  NEW_MESSAGE,
+  USER_LIST,
+  SEND_MESSAGE,
+  DISCONNECT
+} = EVENTS
+
 const registerSocketHandlers = (server) => {
   const io = socketio(server)
 
@@ -13,10 +25,10 @@ const registerSocketHandlers = (server) => {
   const userManager = new UserManager()
 
   // listen for Client connection
-  io.on('connection', (socket) => {
+  io.on(CONNECTION, (socket) => {
     console.log('New web socket connection')
 
-    socket.on('join', (username, callback) => {
+    socket.on(JOIN, (username, callback) => {
       // Add user to list of users
       const { user, error } = userManager.addUser({
         id: socket.id,
@@ -29,14 +41,15 @@ const registerSocketHandlers = (server) => {
 
       // Send welcome message to user
       socket.emit(
-        'newMessage',
+        NEW_MESSAGE,
         generateMessage('Admin', `Welcome ${user.username}`)
       )
       socket.broadcast.emit(
-        'newMessage',
+        NEW_MESSAGE,
         generateMessage('Admin', `${user.username} has joined`)
       )
-      io.emit('userList', {
+      // Send user list
+      io.emit(USER_LIST, {
         users: userManager.users
       })
 
@@ -44,24 +57,28 @@ const registerSocketHandlers = (server) => {
     })
 
     // Sending a message
-    socket.on('sendMessage', (message, callback) => {
+    socket.on(SEND_MESSAGE, (message, callback) => {
       const user = userManager.getUser(socket.id)
       if (!user) {
         return callback({
           error: 'User does not exist'
         })
       }
-      io.emit('newMessage', generateMessage(user.username, message))
+      io.emit(NEW_MESSAGE, generateMessage(user.username, message))
     })
 
     // disconnecting
-    socket.on('disconnect', () => {
+    socket.on(DISCONNECT, () => {
       const user = userManager.removeUser(socket.id)
       if (user) {
         io.emit(
-          'newMessage',
+          NEW_MESSAGE,
           generateMessage('Admin', `${user.username} has left`)
         )
+        // Send updated user list
+        io.emit(USER_LIST, {
+          users: userManager.users
+        })
       }
     })
   })

@@ -20,7 +20,9 @@ const UserManager = class {
     // remove white space and user lowercase
     const sanitizedUsername = username.trim().toLowerCase()
     // determine if username already exists and return error is it does
-    const existingUser = this._users.find((user) => user.username === sanitizedUsername)
+    const existingUser = this._users.find(
+      (user) => user.username === sanitizedUsername
+    )
 
     if (existingUser) {
       return { error: 'User already exists' }

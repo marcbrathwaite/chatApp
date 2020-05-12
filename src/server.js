@@ -18,7 +18,6 @@ if (process.env.NODE_ENV === 'production') {
   app.use(express.static(publicPath))
 }
 
-
 server.listen(EXPRESS_PORT, () => {
   console.log(`Server started on port ${EXPRESS_PORT}`)
 })
